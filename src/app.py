@@ -79,7 +79,7 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("### 📊 System Status")
     st.success("⚡ Backend API: Connected")
-    st.info("🤖 Model: TinyLlama-1.1B (Local)")
+    st.info("🤖 Model: Qwen2.5-1.5B (Local)")
 
 # --- MAIN INTERFACE LAYOUT ---
 tab1, tab2 = st.tabs(["🗺️ AI Travel Planner", "📐 System Architecture"])
