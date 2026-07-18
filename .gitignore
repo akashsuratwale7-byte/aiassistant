@@ -1,0 +1,14 @@
+# Environments
+venv/
+env/
+.env
+
+# Cache
+__pycache__/
+*.pyc
+
+# Uploaded Files
+*.pdf
+
+# Vector Database (if stored locally)
+qdrant_storage/
