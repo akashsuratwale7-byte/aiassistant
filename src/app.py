@@ -101,13 +101,19 @@ with tab1:
     
     # Query Section
     st.subheader("❓ Prompt the Intelligent Agent")
-    query = st.text_input(
-        "Enter destination query:",
-        placeholder="e.g., Provide a historical 3-day walking plan for Paris.",
-        label_visibility="collapsed"
-    )
     
-    if st.button("🔮 Generate Smart Plan", type="primary"):
+    # Wrap the input and button in a form
+    with st.form(key="travel_query_form"):
+        query = st.text_input(
+            "Enter destination query:",
+            placeholder="e.g., Provide a historical 3-day walking plan for Paris.",
+            label_visibility="collapsed"
+        )
+        # Use form_submit_button instead of regular button
+        submit_button = st.form_submit_button("🔮 Generate Smart Plan", type="primary")
+    
+    # Now check if the form was submitted (via button click OR Enter key)
+    if submit_button:
         if query.strip():
             # Create a nice layout container for results
             with st.status("Searching knowledge base & synthesizing response...", expanded=True) as status:
@@ -119,8 +125,14 @@ with tab1:
                         status.update(label="✨ Itinerary Generated successfully!", state="complete", expanded=True)
                         answer = response.json()["response"]
                         
+                        # 1. Chop off any hallucinations after the [END] token
+                        answer = answer.split("[END]")[0].strip()
+                        
+                        # 2. Escape dollar signs AND force Markdown line breaks
+                        safe_answer = answer.replace("$", r"\$").replace("\n", "\n\n")
+                        
                         st.markdown("### 🗺️ Generated Travel Itinerary Plan")
-                        st.info(answer)
+                        st.info(safe_answer)
                     else:
                         status.update(label="❌ Generation failed", state="error")
                         st.error("Server side runtime error occurred.")

@@ -13,9 +13,13 @@ from langchain_openai import ChatOpenAI
 
 prompt_template = PromptTemplate(
     input_variables=["context", "question"],
-    template="""You are a helpful travel assistant.
-Use the following travel guide context to answer the question.
-If the answer is not found, say you don't know — don’t make it up.
+    template="""You are an expert travel assistant.
+Use the provided travel guide context to answer the question.
+
+CRITICAL INSTRUCTIONS:
+- You MUST extract and list every single day requested.
+- Use markdown bullet points for each day.
+- When you finish the itinerary, you MUST write the exact word "[END]". Do not write anything after this word.
 
 Context:
 {context}
@@ -27,7 +31,7 @@ Answer:"""
 )
 
 if MODEL_PROVIDER == "huggingface":
-    model_id = "TinyLlama/TinyLlama-1.1B-Chat-v1.0"
+    model_id = "Qwen/Qwen2.5-1.5B-Instruct"
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     model = AutoModelForCausalLM.from_pretrained(model_id)
     pipe = pipeline(
@@ -36,11 +40,11 @@ if MODEL_PROVIDER == "huggingface":
         tokenizer=tokenizer,
         max_new_tokens=256,
         do_sample=True,
-        temperature=0.7,
+        temperature=0.1,
         top_k=50,
         top_p=0.95,
         return_full_text=False,
-        repetition_penalty=1.2,
+        repetition_penalty=1.05,
     )
     llm = HuggingFacePipeline(pipeline=pipe)
 elif MODEL_PROVIDER == "openai":
