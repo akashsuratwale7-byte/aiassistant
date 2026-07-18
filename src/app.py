@@ -131,7 +131,7 @@ with tab1:
             st.warning("⚠️ Please provide a clear travel prompt first.")
 
 with tab2:
-    st.markdown("## 📐 B.Tech Final Year Project Specs")
+    st.markdown("## 📐 Project Specs")
     st.markdown("This software architecture pattern decouples ingestion, semantic storage, and generative UI.")
     
     st.markdown("""
